@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebRTC</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="//unpkg.com/alpinejs" defer></script>
+  <script src="https://unpkg.com/peerjs@1.3.2/dist/peerjs.min.js"></script>
+  <script src="js/chat.js"></script>
+</head>
+<body>
+  <nav class="flex flex-space-between">
+    <strong class="larger">WebRTC</strong>
+    <div>
+      <ul x-data>
+        <li>Your Profile</li>
+        <li>
+          <label>
+            Your name
+            <span x-text="$store.me.name"></span>
+            <input type="text" x-model="$store.me.name">
+          </label>
+        </li>
+        <li>
+          <label>
+            What's up?
+            <span x-text="$store.me.status"></span>
+            <input type="text" x-model="$store.me.status">
+          </label>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <template x-data x-if="$store.room.id && !$store.room.conn">
+    <div>
+      <h2>Waiting for someone to join...</h2>
+    </div>
+  </template>
+
+  <template x-data x-if="$store.room.id && $store.room.conn">
+    <div>
+      <p>Connection established</p>
+    </div>
+  </template>
+
+  <template x-data x-if="$store.messages.length">
+    <div>
+      <h1 x-text="$store.them.name"></h1>
+      <p x-text="$store.them.status"></p>
+
+      <div class="messages">
+        <template x-for="message in $store.messages">
+          <div class="message">
+            <div class="message-from" x-text="message.from.name"></div>
+            <div class="message-text" x-text="message.text"></div>
+            <div class="message-timestamp" x-text="message.timestamp"></div>
+          </div>
+        </template>
+      </div>
+
+      <form x-data="{message: ''}" @submit.prevent="ChatActions.sendMessage($store, message)">
+        <input type="text" x-model="message" autofocus>
+        <button type="submit">Send</button>
+      </form>
+    </div>
+  </template>
+  
+  <template x-data x-if="!$store.room.id">
+    <div>
+      <h1>WebRTC</h1>
+      <p>Find new friends.</p>
+
+      <form action="">
+        <h2>Connect with someone new</h2>
+        <button>Find Someone</button>
+      </form>
+
+      <hr>
+
+      <form x-data @submit.prevent="ChatActions.hostRoom($store)">
+        <h2>Host a room</h2>
+        <button type="submit">Create room</button>
+      </form>
+
+      <form x-data @submit.prevent="ChatActions.joinRoom($store, 'host-yaari')">
+        <h2>Join host</h2>
+        <button type="submit">Join host</button>
+      </form>
+    </div>
+  </template>
+</body>
+</html>
