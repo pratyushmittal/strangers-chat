@@ -11,38 +11,28 @@
   <script src="js/chat.js"></script>
 </head>
 <body>
-  <nav class="flex flex-space-between">
-    <strong class="larger">WebRTC</strong>
+  <template x-data="{name: '', status: ''}" x-if="!$store.me.name">
     <div>
-      <ul x-data>
-        <li>Your Profile</li>
-        <li>
-          <label>
-            Your name
-            <span x-text="$store.me.name"></span>
-            <input type="text" x-model="$store.me.name">
-          </label>
-        </li>
-        <li>
-          <label>
-            What's up?
-            <span x-text="$store.me.status"></span>
-            <input type="text" x-model="$store.me.status">
-          </label>
-        </li>
-      </ul>
-    </div>
-  </nav>
+      <h1>Hey, welcome!</h1>
+      <p>Please provide your intro.</p>
 
-  <template x-data x-if="$store.room.id && !$store.room.conn">
-    <div>
-      <h2>Waiting for someone to join...</h2>
+      <form @submit.prevent="$store.me = $data; ChatActions.findRoom($store)">
+        <label>
+          Your name
+          <input type="text" x-model="name" placeholder="eg. Jack" required>
+        </label>
+        <label>
+          What's up?
+          <input type="text" x-model="status" placeholder="eg. Jack" required>
+        </label>
+        <button type="submit">Find Someone</button>
+      </form>
     </div>
   </template>
 
-  <template x-data x-if="$store.room.id && $store.room.conn">
+  <template x-data x-if="!$store.messages.length">
     <div>
-      <p>Connection established</p>
+      <p x-text="$store.status"></p>
     </div>
   </template>
 
@@ -64,30 +54,6 @@
       <form x-data="{message: ''}" @submit.prevent="ChatActions.sendMessage($store, message)">
         <input type="text" x-model="message" autofocus>
         <button type="submit">Send</button>
-      </form>
-    </div>
-  </template>
-  
-  <template x-data x-if="!$store.room.id">
-    <div>
-      <h1>WebRTC</h1>
-      <p>Find new friends.</p>
-
-      <form action="">
-        <h2>Connect with someone new</h2>
-        <button>Find Someone</button>
-      </form>
-
-      <hr>
-
-      <form x-data @submit.prevent="ChatActions.hostRoom($store)">
-        <h2>Host a room</h2>
-        <button type="submit">Create room</button>
-      </form>
-
-      <form x-data @submit.prevent="ChatActions.joinRoom($store, 'host-yaari')">
-        <h2>Join host</h2>
-        <button type="submit">Join host</button>
       </form>
     </div>
   </template>
