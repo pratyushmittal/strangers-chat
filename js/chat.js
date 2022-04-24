@@ -120,9 +120,14 @@
     hostCommonRoom($store)
   }
 
+  function scrollToBottom () {
+    window.scrollTo(0, document.body.scrollHeight);
+  }
+
   function setupEverything () {
     document.addEventListener('alpine:init', setupAlpine)
     window.ChatActions = {
+      scrollToBottom: scrollToBottom,
       sendMessage: sendMessage,
       findRoom: findRoom
     }

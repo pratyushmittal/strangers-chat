@@ -50,7 +50,11 @@
 
       <form
         x-data="{message: ''}"
-        @submit.prevent="ChatActions.sendMessage($store, message); message = ''"
+        @submit.prevent="
+          ChatActions.sendMessage($store, message)
+          message = ''
+          ChatActions.scrollToBottom()
+        "
         style="position: sticky; bottom: 0; background: var(--background);"
       >
         <label>
