@@ -1,13 +1,14 @@
 html {
   --black: #1c2317;
   --mute: #336e04;
+  --background: #3dff0d;
   margin: 0;
   padding: 0;
   font-size: 10px;
 }
 
 body {
-  background: #3dff0d;
+  background: var(--background);
   color: var(--black);
   font-family: "Inter", sans-serif;
   font-size: 1.8em;
