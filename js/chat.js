@@ -7,7 +7,7 @@
     })
     Alpine.store('messages', [])
     Alpine.store('conn', false)
-    Alpine.store('status', 'AlpineJS ready.')
+    Alpine.store('status', '')
     console.log('Alpine ready')
   }
 
