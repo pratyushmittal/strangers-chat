@@ -120,16 +120,11 @@
     hostCommonRoom($store)
   }
 
-  function resetHeight (textarea) {
-    textarea.style.height = textarea.scrollHeight + 'px'
-  }
-  
   function setupEverything () {
     document.addEventListener('alpine:init', setupAlpine)
     window.ChatActions = {
       sendMessage: sendMessage,
-      findRoom: findRoom,
-      resetHeight: resetHeight,
+      findRoom: findRoom
     }
   }
   setupEverything()

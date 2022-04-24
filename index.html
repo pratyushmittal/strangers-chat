@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WebRTC</title>
+  <title>Strangers.chat</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -50,19 +50,23 @@
         </template>
       </div>
 
-      <form x-data="{message: ''}" @submit.prevent="ChatActions.sendMessage($store, message)">
+      <form
+        x-data="{message: ''}"
+        @submit.prevent="ChatActions.sendMessage($store, message); message = ''"
+      >
         <label>
           Message
           <textarea
             x-model="message"
-            @input="ChatActions.resetHeight($el)"
-            style="width: 100%; max-width: 320px; overflow-y: hidden;"
+            @keyup.enter="$refs.submitButton.click()"
+            style="width: 100%; max-width: 320px;"
             rows="1"
             required
-            autofocus>
+            autofocus
+          >
           </textarea>
         </label>
-        <button type="submit">Send</button>
+        <button type="submit" x-ref="submitButton">Send</button>
       </form>
     </div>
   </template>
