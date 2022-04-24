@@ -1,18 +1,137 @@
 html {
-  background-color: #f5f5f5;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 14px;
-  line-height: 20px;
-  color: #333333;
+  --black: #1c2317;
+  --mute: #336e04;
   margin: 0;
   padding: 0;
+  font-size: 10px;
 }
 
 body {
-  max-width: 800px;
+  background: #3dff0d;
+  color: var(--black);
+  font-family: "Inter", sans-serif;
+  font-size: 1.8em;
+  line-height: 1.45;
+  max-width: 440px;
+  box-sizing: border-box;
   padding: 30px 20px 50px;
-  border-radius: 16px;
   margin: 24px auto;
-  box-shadow: 0 16px 20px -24px hsla(219, 37%, 18%, 0.24);
+  text-align: center;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: "Pacifico", cursive;
+  font-weight: 400;
+  line-height: 1.1;
+  margin: 0 0 10px;
+}
+
+form {
+  margin: 32px 0;
+}
+
+label {
+  font-weight: 600;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+label input[type="text"],
+label textarea {
+  margin-top: 8px;
+  display: block;
+}
+
+input[type="text"],
+textarea {
+  box-sizing: border-box;
+  padding: 12px 20px;
+  color: var(--black);
   background: #fff;
+  border: 2px solid var(--black);
+  border-radius: 8px;
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-size: 0.8em;
+  line-height: 1;
+}
+
+textarea {
+  line-height: 1.35;
+}
+
+button {
+  margin: 28px 0;
+  background: var(--black);
+  color: #fff;
+  padding: 12px 24px;
+  border: none;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 6px;
+  font-family: "Inter";
+  font-size: 0.9em;
+  font-weight: 600;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.mute {
+  color: var(--mute);
+}
+
+.logo {
+  font-family: "Pacifico", cursive;
+}
+
+.smaller {
+  font-size: smaller;
+}
+
+.larger {
+  font-size: larger;
+}
+
+.margin-top-80 {
+  margin-top: 80px;
+}
+
+.margin-bottom-64 {
+  margin-bottom: 64px;
+}
+
+.messages {
+  display: flex;
+  flex-direction: column;
+  margin-top: 32px;
+}
+
+.message + .message {
+  margin-top: 8px;
+}
+
+.message.me,
+.message.peer {
+  border-radius: 8px;
+  padding: 12px 20px;
+}
+
+.message.me {
+  align-self: flex-end;
+  background: #9acd72;
+}
+
+.message.peer {
+  align-self: flex-start;
+  background: #fff;
+}
+
+.message.system {
+  color: var(--mute);
+  font-size: 1.4rem;
+  font-weight: 500;
 }

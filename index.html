@@ -5,54 +5,63 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WebRTC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter&family=Pacifico&display=swap"
+    rel="stylesheet">
+
   <link rel="stylesheet" href="css/style.css">
   <script src="//unpkg.com/alpinejs" defer></script>
   <script src="https://unpkg.com/peerjs@1.3.2/dist/peerjs.min.js"></script>
   <script src="js/chat.js"></script>
 </head>
 <body>
-  <template x-data="{name: '', status: ''}" x-if="!$store.me.name">
-    <div>
-      <h1>Hey, welcome!</h1>
-      <p>Please provide your intro.</p>
+  <div class="logo">
+    <img src="img/logo.svg" alt="Strangers.chat Logo">
+  </div>
 
-      <form @submit.prevent="$store.me = $data; ChatActions.findRoom($store)">
+  <template x-data="{name: ''}" x-if="!$store.me.name">
+    <div>
+      <h1 style="font-size: 1.8em;">Make new friends.</h1>
+
+      <form class="margin-top-80" @submit.prevent="$store.me = $data; ChatActions.findRoom($store)">
         <label>
           Your name
-          <input type="text" x-model="name" placeholder="eg. Jack" required>
+          <input type="text" x-model="name" placeholder="eg. Jack" required autofocus>
         </label>
-        <label>
-          What's up?
-          <input type="text" x-model="status" placeholder="eg. Jack" required>
-        </label>
-        <button type="submit">Find Someone</button>
+        <button type="submit">Connect</button>
       </form>
     </div>
   </template>
 
   <template x-data x-if="!$store.messages.length">
-    <div>
-      <p x-text="$store.status"></p>
-    </div>
+    <p class="mute smaller" x-text="$store.status"></p>
   </template>
 
   <template x-data x-if="$store.messages.length">
     <div>
-      <h1 x-text="$store.them.name"></h1>
-      <p x-text="$store.them.status"></p>
-
       <div class="messages">
         <template x-for="message in $store.messages">
-          <div class="message">
-            <div class="message-from" x-text="message.from.name"></div>
+          <div class="message" :class="message.from">
             <div class="message-text" x-text="message.text"></div>
-            <div class="message-timestamp" x-text="message.timestamp"></div>
+            <div hidden="true" x-text="message.timestamp"></div>
           </div>
         </template>
       </div>
 
       <form x-data="{message: ''}" @submit.prevent="ChatActions.sendMessage($store, message)">
-        <input type="text" x-model="message" autofocus>
+        <label>
+          Message
+          <textarea
+            x-model="message"
+            @input="ChatActions.resetHeight($el)"
+            style="width: 100%; max-width: 320px; overflow-y: hidden;"
+            rows="1"
+            required
+            autofocus>
+          </textarea>
+        </label>
         <button type="submit">Send</button>
       </form>
     </div>

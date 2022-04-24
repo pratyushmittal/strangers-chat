@@ -3,34 +3,36 @@
 (function() {
   function setupAlpine () {
     Alpine.store('me', {
-      name: '',
-      status: ''
+      name: ''
     })
     Alpine.store('messages', [])
-    Alpine.store('them', false)
     Alpine.store('conn', false)
     Alpine.store('status', 'AlpineJS ready.')
     console.log('Alpine ready')
   }
-  
-  function sendSystemMessage (conn, data) {
-    conn.send({
-      type: 'system',
-      data: data
-    })
-  }
-  
-  function sendMessage ($store, text) {
+
+  function sendMessage ($store, text, isStatus) {
+    // send message
+    var data = {}
+    var msgType = isStatus ? 'status' : 'text'
+    data[msgType] = text
+    $store.conn.send(data)
+
+    // add to own messages
     var message = {
-      from: $store.me,
+      from: isStatus ? {system: true} : {me: true},
       text: text,
       timestamp: Date.now(),
     }
-    $store.conn.send(message)
     $store.messages.push(message)
   }
   
-  function receiveMessage ($store, message) {
+  function receiveMessage ($store, data) {
+    var message = {
+      from: data.status ? {system: true} : {peer: true},
+      text: data.text || data.status,
+      timestamp: Date.now()
+    }
     $store.messages.push(message)
   }
   
@@ -40,14 +42,14 @@
     peer.on('open', function () {
       $store.status = 'Waiting for handshake on private line'
       // share new connection id on old connection
-      var message = {id: peer.id}
-      sendSystemMessage(tempConn, message)
+      tempConn.send({privateID: peer.id})
     })
     
     peer.on('connection', function(conn) {
-      $store.status = 'Connected to private line'
-      $store.conn = conn
-      sendMessage($store, 'joined')
+      conn.on('open', function() {
+        $store.conn = conn
+        sendMessage($store, $store.me.name + ' joined', true)
+      })
       
       // handle messages received from peer
       conn.on('data', function(data) {
@@ -69,7 +71,7 @@
     })
     peer.on('error', function (err) {
       if (err.type === 'unavailable-id') {
-        $store.status = 'Already hosted. Joining them.'
+        $store.status = 'Common room already hosted. Joining it.'
         return joinCommonRoom($store, roomID)
       }
     })
@@ -85,9 +87,8 @@
     var conn = peer.connect(privateID)
     
     conn.on('open', function() {
-      $store.status = 'Private line established.'
       $store.conn = conn
-      sendMessage($store, 'joined')
+      sendMessage($store, $store.me.name + ' joined', true)
     })
     
     // handle messages received from peer
@@ -110,7 +111,7 @@
       
       // handle messages received from peer
       conn.on('data', function(data) {
-        joinPrivateLine($store, peer, data.data.id)
+        joinPrivateLine($store, peer, data.privateID)
       })
     })
   }
@@ -118,13 +119,17 @@
   function findRoom ($store) {
     hostCommonRoom($store)
   }
+
+  function resetHeight (textarea) {
+    textarea.style.height = textarea.scrollHeight + 'px'
+  }
   
   function setupEverything () {
-    console.log('setupEverything')
     document.addEventListener('alpine:init', setupAlpine)
     window.ChatActions = {
       sendMessage: sendMessage,
       findRoom: findRoom,
+      resetHeight: resetHeight,
     }
   }
   setupEverything()
