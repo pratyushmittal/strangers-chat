@@ -21,19 +21,17 @@
     <img src="img/logo.svg" alt="Strangers.chat Logo">
   </div>
 
-  <template x-data="{name: ''}" x-if="!$store.me.name">
-    <div>
-      <h1 style="font-size: 1.8em;">Make new friends.</h1>
+  <div x-data="{name: ''}" x-show="!$store.me.name">
+    <h1 style="font-size: 1.8em;">Make new friends.</h1>
 
-      <form class="margin-top-80" @submit.prevent="$store.me = $data; ChatActions.findRoom($store)">
-        <label>
-          Your name
-          <input type="text" x-model="name" placeholder="eg. Jack" required autofocus>
-        </label>
-        <button type="submit">Connect</button>
-      </form>
-    </div>
-  </template>
+    <form class="margin-top-80" @submit.prevent="$store.me = $data; ChatActions.findRoom($store)">
+      <label>
+        Your name
+        <input type="text" x-model="name" placeholder="eg. Jack" required autofocus>
+      </label>
+      <button type="submit">Connect</button>
+    </form>
+  </div>
 
   <template x-data x-if="!$store.messages.length">
     <p class="mute smaller" x-text="$store.status"></p>
@@ -53,6 +51,7 @@
       <form
         x-data="{message: ''}"
         @submit.prevent="ChatActions.sendMessage($store, message); message = ''"
+        style="position: sticky; bottom: 0;"
       >
         <label>
           Message
